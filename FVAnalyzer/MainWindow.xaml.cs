@@ -191,9 +191,9 @@ namespace FVAnalyzer {
                 fv.MinIndirect = await Task.Run(() => data.Min());
                 fv.MaxIndirect = await Task.Run(() => data.Max());
 
-                IEnumerable<short> nz = await Task.Run(() => data.Where(x => 1 < Math.Abs(x)));
+                IEnumerable<short> nz = await Task.Run(() => data.Where(x => x < -1 || 1 < x));
                 if (nz.Any()) {
-                    IEnumerable<short> nzAbs = await Task.Run(() => nz.Select(x => Math.Abs(x)));
+                    IEnumerable<int> nzAbs = await Task.Run(() => nz.Select(x => Math.Abs((int)x)));
                     fv.AbsMaxIndirect = await Task.Run(() => nzAbs.Max());
                     fv.MeanIndirect = await Task.Run(() => (int)nz.Average(x => (double)x));
                     fv.StdEvpIndirect = await Task.Run(() => (int)Math.Sqrt(nz.Average(x => (double)x * x)));
