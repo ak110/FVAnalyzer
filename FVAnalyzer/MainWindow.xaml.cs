@@ -107,6 +107,13 @@ namespace FVAnalyzer {
             ListView1.DataContext = viewSource;
         }
 
+        private void window_Loaded(object sender, RoutedEventArgs e) {
+            var args = Environment.GetCommandLineArgs();
+            if (1 < args.Length) {
+                Add(args.Skip(1).ToArray(), 32); // FV_SCALE=32固定（手抜き）
+            }
+        }
+
         private void ButtonClear_Click(object sender, RoutedEventArgs e) {
             FVList.Clear();
         }
@@ -133,8 +140,12 @@ namespace FVAnalyzer {
                 MessageBox.Show(this, "FV_SCALEは数値で入力してください。");
             }
 
+            Add(e.Data.GetData(DataFormats.FileDrop) as string[], scale);
+        }
+
+        private void Add(string[] list, double scale) {
             FVList.Clear();
-            foreach (string path in e.Data.GetData(DataFormats.FileDrop) as string[]) {
+            foreach (string path in list) {
                 Add(path, scale);
             }
         }
