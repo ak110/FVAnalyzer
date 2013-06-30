@@ -196,7 +196,7 @@ namespace FVAnalyzer {
                     IEnumerable<short> nzAbs = await Task.Run(() => nz.Select(x => Math.Abs(x)));
                     fv.AbsMaxIndirect = await Task.Run(() => nzAbs.Max());
                     fv.MeanIndirect = await Task.Run(() => (int)nz.Average(x => (double)x));
-                    fv.StdEvpIndirect = await Task.Run(() => (int)(Math.Sqrt(nz.Sum(x => (double)x * x)) / nz.Count()));
+                    fv.StdEvpIndirect = await Task.Run(() => (int)Math.Sqrt(nz.Average(x => (double)x * x)));
                     fv.MeanEvpIndirect = await Task.Run(() => (int)nzAbs.Average(x => (double)x));
                 } else {
                     fv.AbsMaxIndirect = 0;
@@ -229,10 +229,12 @@ namespace FVAnalyzer {
 
             ListSortDirection direction;
             if (headerClicked != _lastHeaderClicked) {
-                if ((string)headerClicked.Tag == "Min") {
+                // 名前と最小値は初回は昇順、他は初回は降順とする
+                if ((string)headerClicked.Tag == "Name" ||
+                    (string)headerClicked.Tag == "Min") {
                     direction = ListSortDirection.Ascending;
                 } else {
-                    direction = ListSortDirection.Descending; // 初回は降順にする
+                    direction = ListSortDirection.Descending;
                 }
             } else {
                 if (_lastDirection == ListSortDirection.Ascending) {
@@ -244,15 +246,7 @@ namespace FVAnalyzer {
 
             // ソート。await での値の設定が完了する前にやると変な事になるのだが…。
 
-            switch ((string)headerClicked.Tag) {
-                case "Name": SetSort("Name", direction); break;
-                case "Min": SetSort("Min", direction); break;
-                case "Max": SetSort("Max", direction); break;
-                case "AbsMax": SetSort("AbsMax", direction); break;
-                case "Mean": SetSort("Mean", direction); break;
-                case "StdEvp": SetSort("StdEvp", direction); break;
-                case "MeanEvp": SetSort("MeanEvp", direction); break;
-            }
+            SetSort((string)headerClicked.Tag, direction);
 
             //if (direction == ListSortDirection.Ascending) {
             //    headerClicked.Column.HeaderTemplate =
