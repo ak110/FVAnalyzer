@@ -1,0 +1,66 @@
+﻿<Window x:Name="window" x:Class="FVAnalyzer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        Title="FVAnalyzer" Height="454" Width="731.025" AllowDrop="True" DragOver="Window_DragOver" Drop="Window_Drop">
+    <Window.Resources>
+        <Style x:Key="listViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+        <DataTemplate x:Key="listItemMin">
+            <TextBlock Text="{Binding Min}" HorizontalAlignment="Right"/>
+        </DataTemplate>
+        <DataTemplate x:Key="listItemMax">
+            <TextBlock Text="{Binding Max}" HorizontalAlignment="Right"/>
+        </DataTemplate>
+        <DataTemplate x:Key="listItemAbsMax">
+            <TextBlock Text="{Binding AbsMax}" HorizontalAlignment="Right"/>
+        </DataTemplate>
+        <DataTemplate x:Key="listItemMean">
+            <TextBlock Text="{Binding Mean}" HorizontalAlignment="Right"/>
+        </DataTemplate>
+        <DataTemplate x:Key="listItemStdEvp">
+            <TextBlock Text="{Binding StdEvp}" HorizontalAlignment="Right"/>
+        </DataTemplate>
+        <DataTemplate x:Key="listItemMeanEvp">
+            <TextBlock Text="{Binding MeanEvp}" HorizontalAlignment="Right"/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid Margin="2,2,2,2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Button x:Name="ButtonClear" Content="クリア" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Grid.Row="0" Click="ButtonClear_Click"/>
+        <ListView x:Name="ListView1" Margin="10" Grid.Row="1" SelectionChanged="ListView_SelectionChanged" ItemsSource="{Binding}"  ItemContainerStyle="{StaticResource listViewItemStyle}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="256" DisplayMemberBinding="{Binding Name}">
+                        <GridViewColumnHeader Content="名前" Tag="Name" Click="GridViewColumnHeader_Click" ></GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="64" CellTemplate="{StaticResource listItemMin}">
+                        <GridViewColumnHeader Content="最小" Tag="Min" Click="GridViewColumnHeader_Click" ></GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="64" CellTemplate="{StaticResource listItemMax}">
+                        <GridViewColumnHeader Content="最大" Tag="Max" Click="GridViewColumnHeader_Click" ></GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="64" CellTemplate="{StaticResource listItemAbsMax}">
+                        <GridViewColumnHeader Content="絶対値最大" Tag="AbsMax" Click="GridViewColumnHeader_Click" ></GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="64" CellTemplate="{StaticResource listItemMean}">
+                        <GridViewColumnHeader Content="平均" Tag="Mean" Click="GridViewColumnHeader_Click" ></GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="64" CellTemplate="{StaticResource listItemStdEvp}">
+                        <GridViewColumnHeader Content="標準偏差" Tag="StdEvp" Click="GridViewColumnHeader_Click" ></GridViewColumnHeader>
+                    </GridViewColumn>
+                    <GridViewColumn Width="64" CellTemplate="{StaticResource listItemMeanEvp}">
+                        <GridViewColumnHeader Content="平均偏差" Tag="MeanEvp" Click="GridViewColumnHeader_Click" ></GridViewColumnHeader>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label Content="FV__SCALE" HorizontalAlignment="Left" Margin="222,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxScale" HorizontalAlignment="Left" Height="23" Margin="297,10,0,0" TextWrapping="Wrap" Text="32" VerticalAlignment="Top" Width="73" HorizontalContentAlignment="Right"/>
+        <Button x:Name="ButtonApplyScale" Content="反映" HorizontalAlignment="Left" Margin="375,10,0,0" VerticalAlignment="Top" Width="75" Click="ButtonApplyScale_Click"/>
+    </Grid>
+</Window>

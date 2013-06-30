@@ -1,0 +1,4 @@
+*.suo
+FVAnalyzer/bin
+FVAnalyzer/obj
+FVAnalyzer/*.user
