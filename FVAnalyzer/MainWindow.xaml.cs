@@ -31,6 +31,8 @@ namespace FVAnalyzer {
             public double Scale { get; set; }
 
             int? _Min, _Max, _AbsMax, _Mean, _StdEvp, _MeanEvp;
+            double? _NonZeroRate;
+
             public int? MinIndirect {
                 get { return _Min; }
                 set { _Min = value; NotifyChanged("Min"); }
@@ -55,6 +57,10 @@ namespace FVAnalyzer {
                 get { return _MeanEvp; }
                 set { _MeanEvp = value; NotifyChanged("MeanEvp"); }
             }
+            public double? NonZeroRateIndirect {
+                get { return _NonZeroRate; }
+                set { _NonZeroRate = value; NotifyChanged("NonZeroRate"); }
+            }
 
             public int? Min { get { return DoScale(_Min); } }
             public int? Max { get { return DoScale(_Max); } }
@@ -62,6 +68,7 @@ namespace FVAnalyzer {
             public int? Mean { get { return DoScale(_Mean); } }
             public int? StdEvp { get { return DoScale(_StdEvp); } }
             public int? MeanEvp { get { return DoScale(_MeanEvp); } }
+            public double? NonZeroRate { get { return _NonZeroRate; } }
 
             private int? DoScale(int? value) {
                 return value.HasValue ? (int?)(int)((double)value.Value / Scale) : null;
@@ -82,6 +89,7 @@ namespace FVAnalyzer {
                 NotifyChanged("Mean");
                 NotifyChanged("StdEvp");
                 NotifyChanged("MeanEvp");
+                NotifyChanged("NonZeroRate");
             }
 
             /// <summary>
@@ -209,11 +217,13 @@ namespace FVAnalyzer {
                     fv.MeanIndirect = await Task.Run(() => (int)nz.Average(x => (double)x));
                     fv.StdEvpIndirect = await Task.Run(() => (int)Math.Sqrt(nz.Average(x => (double)x * x)));
                     fv.MeanEvpIndirect = await Task.Run(() => (int)nzAbs.Average(x => (double)x));
+                    fv.NonZeroRateIndirect = await Task.Run(() => 100.0 * nz.Count() / data.Count());
                 } else {
                     fv.AbsMaxIndirect = 0;
                     fv.MeanIndirect = 0;
                     fv.StdEvpIndirect = 0;
                     fv.MeanEvpIndirect = 0;
+                    fv.NonZeroRateIndirect = 0;
                 }
             } catch (Exception e) {
                 fv.Name += " (エラー：" + e.Message + ")";
@@ -224,6 +234,7 @@ namespace FVAnalyzer {
                 fv.MeanIndirect = null;
                 fv.StdEvpIndirect = null;
                 fv.MeanEvpIndirect = null;
+                fv.NonZeroRateIndirect = null;
             }
         }
 
