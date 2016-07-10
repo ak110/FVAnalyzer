@@ -1,5 +1,6 @@
 FVAnalyzer
 ==========
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 fv.binなどの統計情報を表示したりするツール
 
